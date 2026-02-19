@@ -4,12 +4,6 @@ import psycopg2
 from psycopg2.extras import execute_values
 from database.PostgreSQLHandler import save_articles
 from database.PostgreSQLHandler import setup_database
-# Настройки подключения к базе данных
-DB_HOST = 'localhost'
-DB_PORT = '5432'
-DB_NAME = 'postgres'
-DB_USER = 'postgres'
-DB_PASSWORD = 'postgres'
 
 
 
@@ -60,28 +54,6 @@ class BlogParser:
             articles.append(BlogArticle(title=title, text=text))
         return articles
 
-def create_database(db_name='top_academy_blog.db'):
-    conn = sqlite3.connect(db_name)
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS articles (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT UNIQUE,
-            text TEXT
-        )
-    ''')
-    conn.commit()
-    return conn
-
-
-
-def print_first_five_articles(conn):
-    cursor = conn.cursor()
-    cursor.execute('SELECT id, title, text FROM articles ORDER BY id LIMIT 5')
-    rows = cursor.fetchall()
-    print("\nПервые 5 статей из базы данных:")
-    for row in rows:
-        print(f"\nID: {row[0]}\nЗаголовок: {row[1]}\nТекст: {row[2]}")
 
 def main():
     print("Запуск парсинга блога Top Academy...")
